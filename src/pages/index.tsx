@@ -67,8 +67,8 @@ const Home = () => {
   };
 
   return (
-    <div className="flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
-      <div className="w-3/4">
+    <div className="p-5 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
+      <div className="w-3/4 h-full flex-shrink-0">
         <UploadImg
           isReselect={images.length > 0}
           onSelectedChange={handleFileChange}

@@ -16,8 +16,8 @@ function ImageInfo(props: ImageInfoProps) {
   if (images.length === 0) return;
 
   return (
-    <div className="flex justify-center">
-      <div className="flex gap-5">
+    <div className="max-h-[100%] flex justify-center bg-white rounded-3xl overflow-y-auto scrollbar-custom">
+      <div className="flex gap-5 flex-wrap p-5">
         {images.map(({ url, name, size }: ImagesUpload, index: number) => (
           <ImageCard
             key={`${index}${index}`}
