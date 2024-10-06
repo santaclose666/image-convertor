@@ -1,23 +1,20 @@
-import ImageInfo from "@/components/ImageInfo";
-import ImageOption from "@/components/ImageOption";
+import ImageInfo from "@/components/ListImgInfo";
+import ImageOption from "@/components/ResizeOptions";
 import UploadImg from "@/components/UploadImg";
+import { ImagesUpload } from "@/models/Image.model";
+import { convertNumber } from "@/util/dataMsUnit";
 import { createUrl, revokeUrl } from "@/util/url";
 import { ChangeEvent, useState } from "react";
 
-export interface ImagesUpload {
-  url: string;
-  name: string;
-  size: { w: number; h: number };
-}
-
 const Home = () => {
+  const [ratio, setRatio] = useState<number>(1);
   const [images, setImages] = useState<ImagesUpload[]>([]);
-  // const [percentage, setPercentage] = useState(100);
 
   const getImgInfo = async (file: File): Promise<ImagesUpload> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
       const imgUrl = createUrl(file);
+      const { size, unit } = convertNumber(file.size);
 
       img.src = imgUrl;
 
@@ -25,7 +22,10 @@ const Home = () => {
         const imgInfo: ImagesUpload = {
           url: imgUrl,
           name: file.name,
-          size: { w: img.width, h: img.height },
+          w: img.width,
+          h: img.height,
+          size,
+          unit,
         };
 
         resolve(imgInfo);
@@ -39,17 +39,11 @@ const Home = () => {
   };
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("trigger");
-
     const files = e.target.files ? Array.from(e.target.files) : [];
-
-    console.log(files);
 
     const images: ImagesUpload[] = await Promise.all(
       files.map((file) => getImgInfo(file))
     );
-
-    console.log(images);
 
     setImages(images);
 
@@ -66,21 +60,34 @@ const Home = () => {
     setImages(newImgs);
   };
 
+  const handleRatioChange = (num: number) => {
+    setRatio(num / 100);
+  };
+
+  const handleResizeImg = (size: string, isWidthChange: boolean) => {
+    console.log(size, isWidthChange);
+  };
+
   return (
     <div className="p-5 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
-      <div className="w-3/4 h-full flex-shrink-0">
+      <div className="w-3/4 h-full overflow-hidden">
         <UploadImg
           isReselect={images.length > 0}
           onSelectedChange={handleFileChange}
         />
         <ImageInfo
           images={images}
-          percentage={100}
+          ratio={ratio}
           onRemoveImg={handleRemoveImg}
         />
       </div>
 
-      <ImageOption display={images.length > 0} />
+      <ImageOption
+        display={images.length > 0}
+        ratio={ratio * 100}
+        onRatioChange={handleRatioChange}
+        onSizeChange={handleResizeImg}
+      />
     </div>
   );
 };

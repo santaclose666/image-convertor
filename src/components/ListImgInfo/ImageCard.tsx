@@ -1,38 +1,43 @@
-import { ImagesUpload } from "@/pages";
+import { ImagesUpload } from "@/models/Image.model";
+import { floorNumber } from "@/util/number";
 import { ArrowRight, CircleX } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface ImageCardProps extends ImagesUpload {
-  percentage: number;
+  ratio: number;
   onRemoveImg: (url: string) => void;
 }
 
 function ImageCard(props: ImageCardProps) {
-  const { percentage, name, url, size, onRemoveImg } = props;
+  const { ratio, name, url, w, h, size, unit, onRemoveImg } = props;
 
-  const [width, setWidth] = useState(size.w);
-  const [height, setHeight] = useState(size.h);
+  const [width, setWidth] = useState(w * ratio);
+  const [height, setHeight] = useState(h * ratio);
 
   useEffect(() => {
-    setWidth(size.w * percentage);
-    setHeight(size.h * percentage);
-  }, [percentage]);
+    setWidth(floorNumber(w * ratio));
+    setHeight(floorNumber(h * ratio));
+  }, [ratio]);
 
   return (
-    <div className="relative text-center group justify-center max-w-60 p-4 bg-white rounded-3xl shadow-2xl hover:cursor-pointer">
+    <div className="relative text-center group justify-center max-w-64 min-w-52 p-4 bg-white rounded-3xl shadow-xl hover:cursor-pointer border border-neutral-200 transition-transform duration-200 ease-in-out transform hover:scale-105 hover:border-2 hover:border-blue-400">
       <img
         src={url}
-        alt={`${name}$}`}
-        className="w-60 h-60 object-scale-down bg-black rounded-xl"
+        alt={`${name}${url}`}
+        className="w-full h-52 object-scale-down bg-black rounded-xl"
       />
 
-      <p className="my-2 overflow-hidden text-ellipsis whitespace-nowrap text-xl font-bold text-sky-400 hover:text-sky-600">
+      <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl font-bold text-sky-400">
         {name}
+      </p>
+
+      <p className="my-1 font-semibold text-zinc-500">
+        {size} {unit}
       </p>
 
       <div className="flex text-center items-center justify-center">
         <span className="text-sm bg-slate-200 p-1 rounded-md font-medium">
-          {size.w} - {size.h}
+          {w} - {h}
         </span>
         <span className="mx-1">
           <ArrowRight size={20} />
@@ -52,7 +57,7 @@ function ImageCard(props: ImageCardProps) {
 
       <div
         onClick={() => onRemoveImg(url)}
-        className="absolute top-[-10px] right-[-10px] bg-white rounded-full opacity-0 transition-opacity group-hover:opacity-100"
+        className="absolute top-[-10px] right-[-10px] bg-white rounded-full opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
       >
         <CircleX size={30} color="#eb4899" />
       </div>

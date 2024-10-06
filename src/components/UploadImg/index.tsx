@@ -8,7 +8,7 @@ interface UploadImgProps {
 function UploadImg(props: UploadImgProps) {
   const { isReselect = false, onSelectedChange } = props;
   return (
-    <div className="max-h-[25%] w-[100%] text-center mb-6">
+    <div className="flex flex-col items-center justify-center h-1/4 w-[100%] text-center">
       <h1 className="text-4xl font-bold mb-4 text-sky-400 ">Upload Images</h1>
       <div className="mb-4 flex justify-center">
         <input
