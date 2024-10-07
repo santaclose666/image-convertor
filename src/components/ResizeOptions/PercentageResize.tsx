@@ -68,7 +68,7 @@ function PercentageResize(props: ProgressBarProps) {
 
       <div className="flex items-center my-5">
         <div className="flex-grow border-t border-gray-300"></div>
-        <span className="mx-4 text-sky-300">OR</span>
+        <span className="mx-4 text-sky-400">OR</span>
         <div className="flex-grow border-t border-gray-300"></div>
       </div>
 

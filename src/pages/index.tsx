@@ -3,13 +3,15 @@ import ImageOption from "@/components/ResizeOptions";
 import UploadImg from "@/components/UploadImg";
 import { ImagesUpload } from "@/models/Image.model";
 import { convertNumber } from "@/util/dataMsUnit";
+import { floorNumber } from "@/util/number";
 import { createUrl, revokeUrl } from "@/util/url";
 import { ChangeEvent, useState } from "react";
 
 const Home = () => {
   const [ratio, setRatio] = useState<number>(1);
-  const [isLockRatio, setIsLockRatio] = useState<boolean>(true);
+  const [format, setFormat] = useState<string>("Original");
   const [images, setImages] = useState<ImagesUpload[]>([]);
+  const [isLockRatio, setIsLockRatio] = useState<boolean>(true);
 
   const getImgInfo = async (file: File): Promise<ImagesUpload> => {
     return new Promise((resolve, reject) => {
@@ -25,8 +27,12 @@ const Home = () => {
           name: file.name,
           w: img.width,
           h: img.height,
+          wResize: img.width,
+          hResize: img.height,
           size,
           unit,
+          type: file.type,
+          file,
         };
 
         resolve(imgInfo);
@@ -47,12 +53,6 @@ const Home = () => {
     );
 
     setImages(images);
-
-    // const formData = new FormData();
-
-    // files.forEach((file) => {
-    //   formData.append("images", file);
-    // });
   };
 
   const handleRemoveImg = (url: string) => {
@@ -62,15 +62,60 @@ const Home = () => {
   };
 
   const handleRatioChange = (num: number) => {
-    setRatio(num / 100);
+    const newRatio = num / 100;
+
+    const newImgs = images.map((item: ImagesUpload) => ({
+      ...item,
+      wResize: floorNumber(item.w * newRatio),
+      hResize: floorNumber(item.h * newRatio),
+    }));
+
+    setImages(newImgs);
+    setRatio(newRatio);
   };
 
   const handleResizeImg = (size: string, isWidthChange: boolean) => {
-    console.log(size, isWidthChange);
+    const newSize = Number(size);
+    const newImages = images.map((item: ImagesUpload) => {
+      if (isWidthChange) {
+        const newHeight = floorNumber((newSize / item.w) * item.h);
+
+        return {
+          ...item,
+          wResize: newSize === 0 ? item.w : newSize,
+          hResize: newSize === 0 ? item.h : newHeight,
+        };
+      } else {
+        const newWidth = floorNumber((newSize / item.h) * item.w);
+
+        return {
+          ...item,
+          wResize: newSize === 0 ? item.w : newWidth,
+          hResize: newSize === 0 ? item.h : newSize,
+        };
+      }
+    });
+
+    setImages(newImages);
+
+    if (ratio != 1) {
+      setRatio(1);
+    }
   };
 
   const handleLockRatio = () => {
     setIsLockRatio(!isLockRatio);
+  };
+
+  const handleSubmitImgs = async () => {
+    console.log(images);
+    console.log(format);
+
+    // const formData = new FormData();
+
+    // files.forEach((file) => {
+    //   formData.append("images", file);
+    // });
   };
 
   return (
@@ -80,20 +125,19 @@ const Home = () => {
           isReselect={images.length > 0}
           onSelectedChange={handleFileChange}
         />
-        <ImageInfo
-          images={images}
-          ratio={ratio}
-          onRemoveImg={handleRemoveImg}
-        />
+        <ImageInfo images={images} onRemoveImg={handleRemoveImg} />
       </div>
 
       <ImageOption
+        format={format}
         ratio={ratio * 100}
         lockRatio={isLockRatio}
         display={images.length > 0}
-        onRatioChange={handleRatioChange}
-        onSizeChange={handleResizeImg}
+        onFormatChange={setFormat}
         onLockRatio={handleLockRatio}
+        onSizeChange={handleResizeImg}
+        onSubmitImgs={handleSubmitImgs}
+        onRatioChange={handleRatioChange}
       />
     </div>
   );
