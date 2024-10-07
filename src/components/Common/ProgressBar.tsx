@@ -33,7 +33,9 @@ function ProgressBar(props: ProgressBarProps) {
         }
       />
 
-      <span className="w-[20%] text-center">{floorNumber(value)}%</span>
+      <span className="w-[20%] text-center text-sky-500">
+        {floorNumber(value)}%
+      </span>
     </div>
   );
 }

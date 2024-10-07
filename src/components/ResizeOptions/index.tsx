@@ -6,20 +6,35 @@ import PercentageResize from "./PercentageResize";
 import DimensionResize from "./DimensionResize";
 
 interface ImageOptionProps {
+  lockRatio: boolean;
   display: boolean;
   ratio: number;
   onRatioChange: (ratio: number) => void;
   onSizeChange: (size: string, isWChange: boolean) => void;
+  onLockRatio: () => void;
 }
 
 function ImageOption(props: ImageOptionProps) {
-  const { display = false, ratio, onRatioChange, onSizeChange } = props;
+  const {
+    lockRatio,
+    display = false,
+    ratio,
+    onRatioChange,
+    onSizeChange,
+    onLockRatio,
+  } = props;
   const tabsData: Tab[] = [
     {
       id: 1,
       label: "Dimension",
       icon: <PencilRuler size={20} />,
-      content: <DimensionResize onResize={onSizeChange} />,
+      content: (
+        <DimensionResize
+          lockRatio={lockRatio}
+          onResize={onSizeChange}
+          onLockRatio={onLockRatio}
+        />
+      ),
     },
     {
       id: 2,
@@ -46,7 +61,7 @@ function ImageOption(props: ImageOptionProps) {
           display ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <h2 className="text-center font-medium text-2xl mb-3">
+        <h2 className="text-sky-500 text-center font-medium text-2xl mb-3">
           Resize Options
         </h2>
 

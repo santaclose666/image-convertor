@@ -8,6 +8,7 @@ import { ChangeEvent, useState } from "react";
 
 const Home = () => {
   const [ratio, setRatio] = useState<number>(1);
+  const [isLockRatio, setIsLockRatio] = useState<boolean>(true);
   const [images, setImages] = useState<ImagesUpload[]>([]);
 
   const getImgInfo = async (file: File): Promise<ImagesUpload> => {
@@ -68,6 +69,10 @@ const Home = () => {
     console.log(size, isWidthChange);
   };
 
+  const handleLockRatio = () => {
+    setIsLockRatio(!isLockRatio);
+  };
+
   return (
     <div className="p-5 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
       <div className="w-3/4 h-full overflow-hidden">
@@ -83,10 +88,12 @@ const Home = () => {
       </div>
 
       <ImageOption
-        display={images.length > 0}
         ratio={ratio * 100}
+        lockRatio={isLockRatio}
+        display={images.length > 0}
         onRatioChange={handleRatioChange}
         onSizeChange={handleResizeImg}
+        onLockRatio={handleLockRatio}
       />
     </div>
   );

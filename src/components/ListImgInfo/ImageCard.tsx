@@ -2,6 +2,7 @@ import { ImagesUpload } from "@/models/Image.model";
 import { floorNumber } from "@/util/number";
 import { ArrowRight, CircleX } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 interface ImageCardProps extends ImagesUpload {
   ratio: number;
@@ -36,7 +37,7 @@ function ImageCard(props: ImageCardProps) {
       </p>
 
       <div className="flex text-center items-center justify-center">
-        <span className="text-sm bg-slate-200 p-1 rounded-md font-medium">
+        <span className="text-sm text-gray-950 bg-slate-200 p-1 rounded-md font-medium">
           {w} - {h}
         </span>
         <span className="mx-1">
@@ -45,12 +46,12 @@ function ImageCard(props: ImageCardProps) {
         <div className="flex items-center justify-between text-sm bg-indigo-200 p-1 rounded-md">
           <input
             value={width}
-            className="w-[auto] max-w-8 border-none focus:outline-none focus:ring-0 bg-transparent font-medium"
+            className="w-[auto] text-gray-950 max-w-8 border-none focus:outline-none focus:ring-0 bg-transparent font-medium"
           />
-          <span className="mx-1">-</span>
+          <span className="mx-1 text-gray-950">-</span>
           <input
             value={height}
-            className="w-[auto] max-w-8 border-none focus:outline-none focus:ring-0 bg-transparent font-medium"
+            className="w-[auto] text-gray-950 max-w-8 border-none focus:outline-none focus:ring-0 bg-transparent font-medium"
           />
         </div>
       </div>
