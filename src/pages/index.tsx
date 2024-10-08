@@ -1,9 +1,11 @@
+import { sendMultiFormImg } from "@/api";
 import ImageInfo from "@/components/ListImgInfo";
 import ImageOption from "@/components/ResizeOptions";
 import UploadImg from "@/components/UploadImg";
 import { ImagesUpload } from "@/models/Image.model";
 import { convertNumber } from "@/util/dataMsUnit";
 import { floorNumber } from "@/util/number";
+import { jsonConvert } from "@/util/string";
 import { createUrl, revokeUrl } from "@/util/url";
 import { ChangeEvent, useState } from "react";
 
@@ -108,14 +110,21 @@ const Home = () => {
   };
 
   const handleSubmitImgs = async () => {
-    console.log(images);
-    console.log(format);
+    const formData = new FormData();
 
-    // const formData = new FormData();
+    formData.append("typeConvert", format);
 
-    // files.forEach((file) => {
-    //   formData.append("images", file);
-    // });
+    images.forEach((image) => {
+      formData.append("name", image.name);
+      formData.append("originSize", jsonConvert({ w: image.w, h: image.h }));
+      formData.append(
+        "formatSize",
+        jsonConvert({ wResize: image.wResize, hResize: image.hResize })
+      );
+      formData.append("files", image.file!);
+    });
+
+    sendMultiFormImg(formData);
   };
 
   return (

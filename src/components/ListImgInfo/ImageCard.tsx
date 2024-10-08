@@ -17,7 +17,7 @@ function ImageCard(props: ImageCardProps) {
         alt={`${name}${url}`}
         width={20}
         height={208}
-        className="w-full h-52 object-scale-down bg-black rounded-xl"
+        className="w-full h-52 bg-black rounded-xl"
       />
 
       <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl font-bold text-sky-400">

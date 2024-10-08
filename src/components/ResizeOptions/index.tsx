@@ -79,7 +79,6 @@ function ImageOption(props: ImageOptionProps) {
           <label className="text-sky-500 mb-2">Save Image As</label>
           <select
             value={format}
-            defaultValue={formatSupport[0]}
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               onFormatChange(e.target.value)
             }
