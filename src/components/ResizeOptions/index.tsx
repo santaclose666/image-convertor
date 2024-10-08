@@ -1,16 +1,14 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import TabsOptions from "./TabsOptions";
 import { PencilRuler, Percent, Scaling } from "lucide-react";
 import { Tab } from "@/models/Tabs.model";
 import PercentageResize from "./PercentageResize";
 import DimensionResize from "./DimensionResize";
+import Loading from "../Common/Loading";
 
 interface ImageOptionProps {
-  ratio: number;
   format: string;
   display: boolean;
-  lockRatio: boolean;
-  onLockRatio: () => void;
   onSubmitImgs: () => void;
   onFormatChange: (s: string) => void;
   onRatioChange: (ratio: number) => void;
@@ -21,16 +19,15 @@ const formatSupport: string[] = ["Original", "JPG", "PNG", "WEBP", "AVIF"];
 
 function ImageOption(props: ImageOptionProps) {
   const {
-    ratio,
     format,
     display,
-    lockRatio,
-    onLockRatio,
     onSubmitImgs,
     onSizeChange,
     onRatioChange,
     onFormatChange,
   } = props;
+  const [ratio, setRatio] = useState<number>(100);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const tabsData: Tab[] = [
     {
       id: 1,
@@ -38,9 +35,13 @@ function ImageOption(props: ImageOptionProps) {
       icon: <PencilRuler size={20} />,
       content: (
         <DimensionResize
-          lockRatio={lockRatio}
-          onResize={onSizeChange}
-          onLockRatio={onLockRatio}
+          onResize={(size: string, isWChange: boolean) => {
+            onSizeChange(size, isWChange);
+
+            if (ratio != 1) {
+              setRatio(1);
+            }
+          }}
         />
       ),
     },
@@ -52,11 +53,24 @@ function ImageOption(props: ImageOptionProps) {
         <PercentageResize
           value={ratio}
           maxRange={200}
-          onRatioChange={onRatioChange}
+          onRatioChange={(num: number) => {
+            onRatioChange(num);
+            setRatio(num);
+          }}
         />
       ),
     },
   ];
+
+  const handleSubmit = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      onSubmitImgs();
+    }, 1000);
+
+    setIsLoading(false);
+  };
 
   return (
     <div
@@ -99,10 +113,16 @@ function ImageOption(props: ImageOptionProps) {
         </div>
 
         <button
-          onClick={onSubmitImgs}
-          className="flex items-center justify-center mt-auto bg-sky-400 text-white text-2xl font-semibold px-4 py-2 rounded-lg shadow hover:bg-sky-500 transition"
+          disabled={isLoading}
+          onClick={handleSubmit}
+          className="flex items-center justify-center mt-auto bg-sky-400 text-white text-2xl font-semibold px-4 py-3 rounded-lg shadow hover:bg-sky-500 transition"
         >
-          Resize Images <Scaling className="ml-2" />
+          Resize Images{" "}
+          {isLoading ? (
+            <Loading className="ml-3" />
+          ) : (
+            <Scaling className="ml-2" />
+          )}
         </button>
       </div>
     </div>

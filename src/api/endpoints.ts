@@ -1,4 +1,7 @@
 export const multiFileData = {
-  endpoint: "http://localhost:6000/processPhotos",
+  endpoint: `${process.env.NEXT_PUBLIC_SERVER_URL}/processPhotos`,
   method: "POST",
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
 };

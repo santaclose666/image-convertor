@@ -1,16 +1,10 @@
 import React, { ChangeEvent, useState } from "react";
 
 interface DimensionResizeProps {
-  lockRatio: boolean;
   onResize: (size: string, isWChange: boolean) => void;
-  onLockRatio: () => void;
 }
 
-const DimensionResize = ({
-  lockRatio,
-  onResize,
-  onLockRatio,
-}: DimensionResizeProps) => {
+const DimensionResize = ({ onResize }: DimensionResizeProps) => {
   const [width, setWidth] = useState("0");
   const [height, setHeight] = useState("0");
   const [isFocusWidth, setIsFocusWidth] = useState<boolean>(true);
@@ -85,8 +79,8 @@ const DimensionResize = ({
         <input
           type="checkbox"
           id="lock-aspect-ratio"
-          checked={lockRatio}
-          onChange={onLockRatio}
+          checked={true}
+          disabled
           className="w-5 h-5 mr-2 rounded border border-gray-500 focus:outline-none checked:bg-blue-600 checked:border-transparent"
         />
         <label

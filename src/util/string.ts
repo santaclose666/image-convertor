@@ -1,3 +1,3 @@
-export const jsonConvert = (data: any) => {
+export const jsonConvert = (data: unknown) => {
   return JSON.stringify(data);
 };

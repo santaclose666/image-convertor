@@ -10,10 +10,8 @@ import { createUrl, revokeUrl } from "@/util/url";
 import { ChangeEvent, useState } from "react";
 
 const Home = () => {
-  const [ratio, setRatio] = useState<number>(1);
   const [format, setFormat] = useState<string>("Original");
   const [images, setImages] = useState<ImagesUpload[]>([]);
-  const [isLockRatio, setIsLockRatio] = useState<boolean>(true);
 
   const getImgInfo = async (file: File): Promise<ImagesUpload> => {
     return new Promise((resolve, reject) => {
@@ -49,6 +47,7 @@ const Home = () => {
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
+    console.log(e.target.files);
 
     const images: ImagesUpload[] = await Promise.all(
       files.map((file) => getImgInfo(file))
@@ -73,7 +72,6 @@ const Home = () => {
     }));
 
     setImages(newImgs);
-    setRatio(newRatio);
   };
 
   const handleResizeImg = (size: string, isWidthChange: boolean) => {
@@ -99,14 +97,6 @@ const Home = () => {
     });
 
     setImages(newImages);
-
-    if (ratio != 1) {
-      setRatio(1);
-    }
-  };
-
-  const handleLockRatio = () => {
-    setIsLockRatio(!isLockRatio);
   };
 
   const handleSubmitImgs = async () => {
@@ -115,11 +105,9 @@ const Home = () => {
     formData.append("typeConvert", format);
 
     images.forEach((image) => {
-      formData.append("name", image.name);
-      formData.append("originSize", jsonConvert({ w: image.w, h: image.h }));
       formData.append(
         "formatSize",
-        jsonConvert({ wResize: image.wResize, hResize: image.hResize })
+        jsonConvert({ w: image.wResize, h: image.hResize })
       );
       formData.append("files", image.file!);
     });
@@ -139,11 +127,8 @@ const Home = () => {
 
       <ImageOption
         format={format}
-        ratio={ratio * 100}
-        lockRatio={isLockRatio}
         display={images.length > 0}
         onFormatChange={setFormat}
-        onLockRatio={handleLockRatio}
         onSizeChange={handleResizeImg}
         onSubmitImgs={handleSubmitImgs}
         onRatioChange={handleRatioChange}
