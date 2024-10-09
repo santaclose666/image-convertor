@@ -27,7 +27,7 @@ function ImageOption(props: ImageOptionProps) {
     onFormatChange,
   } = props;
   const [ratio, setRatio] = useState<number>(100);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const tabsData: Tab[] = [
     {
       id: 1,
@@ -62,19 +62,21 @@ function ImageOption(props: ImageOptionProps) {
     },
   ];
 
-  const handleSubmit = () => {
-    setIsLoading(true);
+  const handleSubmit = async () => {
+    setIsFetching(true);
 
-    setTimeout(() => {
-      onSubmitImgs();
-    }, 1000);
-
-    setIsLoading(false);
+    try {
+      await onSubmitImgs();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   return (
     <div
-      className={`h-full ms-6 transition-all duration-500 ${
+      className={`h-full ml-8 transition-all duration-500 ${
         display ? "w-1/4 opacity-100 flex-grow min-w-64" : "opacity-0 w-0"
       }`}
     >
@@ -113,13 +115,13 @@ function ImageOption(props: ImageOptionProps) {
         </div>
 
         <button
-          disabled={isLoading}
+          disabled={isFetching}
           onClick={handleSubmit}
           className="flex items-center justify-center mt-auto bg-sky-400 text-white text-2xl font-semibold px-4 py-3 rounded-lg shadow hover:bg-sky-500 transition"
         >
-          Resize Images{" "}
-          {isLoading ? (
-            <Loading className="ml-3" />
+          {isFetching ? "Processing Images" : "Resize Images"}{" "}
+          {isFetching ? (
+            <Loading className="ml-2" />
           ) : (
             <Scaling className="ml-2" />
           )}

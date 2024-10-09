@@ -1,4 +1,5 @@
 import { sendMultiFormImg } from "@/api";
+import DropImgs from "@/components/DropImg";
 import ImageInfo from "@/components/ListImgInfo";
 import ImageOption from "@/components/ResizeOptions";
 import UploadImg from "@/components/UploadImg";
@@ -45,10 +46,7 @@ const Home = () => {
     });
   };
 
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-    console.log(e.target.files);
-
+  const handleFileChange = async (files: File[]) => {
     const images: ImagesUpload[] = await Promise.all(
       files.map((file) => getImgInfo(file))
     );
@@ -100,29 +98,41 @@ const Home = () => {
   };
 
   const handleSubmitImgs = async () => {
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    formData.append("typeConvert", format);
+      formData.append("typeConvert", format);
 
-    images.forEach((image) => {
-      formData.append(
-        "formatSize",
-        jsonConvert({ w: image.wResize, h: image.hResize })
-      );
-      formData.append("files", image.file!);
-    });
+      images.forEach((image) => {
+        formData.append(
+          "formatSize",
+          jsonConvert({ w: image.wResize, h: image.hResize })
+        );
+        formData.append("files", image.file!);
+      });
 
-    sendMultiFormImg(formData);
+      await sendMultiFormImg(formData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div className="p-5 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
+    <div className="px-24 py-12 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
       <div className="w-3/4 h-full overflow-hidden">
         <UploadImg
           isReselect={images.length > 0}
-          onSelectedChange={handleFileChange}
+          onSelectedChange={(e: ChangeEvent<HTMLInputElement>) => {
+            const files = e.target.files ? Array.from(e.target.files) : [];
+            handleFileChange(files);
+          }}
         />
-        <ImageInfo images={images} onRemoveImg={handleRemoveImg} />
+
+        {images.length > 0 ? (
+          <ImageInfo images={images} onRemoveImg={handleRemoveImg} />
+        ) : (
+          <DropImgs onDropImgs={handleFileChange} />
+        )}
       </div>
 
       <ImageOption
