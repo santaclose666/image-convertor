@@ -17,7 +17,7 @@ function ImageCard(props: ImageCardProps) {
         alt={`${name}${url}`}
         width="0"
         height="0"
-        className="w-full h-52 bg-black rounded-xl object-cover"
+        className="w-52 h-52 bg-black rounded-xl object-cover"
       />
 
       <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl font-bold text-sky-400">
@@ -33,7 +33,7 @@ function ImageCard(props: ImageCardProps) {
           {w} - {h}
         </span>
         <span className="mx-1">
-          <ArrowRight size={20} />
+          <ArrowRight size={20} color="#000000" />
         </span>
         <span className="text-sm text-gray-950 bg-indigo-200 p-1 rounded-md font-medium">
           {wResize} - {hResize}
