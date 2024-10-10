@@ -11,44 +11,50 @@ function ImageCard(props: ImageCardProps) {
   const { name, url, w, h, wResize, hResize, size, unit, onRemoveImg } = props;
 
   return (
-    <div className="relative text-center group justify-center max-w-64 min-w-52 p-4 bg-white rounded-3xl shadow-xl hover:cursor-pointer border border-neutral-200 transition-transform duration-200 ease-in-out transform hover:scale-105 hover:border-2 hover:border-blue-400">
+    <div
+      className="relative text-center group justify-center w-64 p-4 bg-white rounded-3xl shadow-xl hover:cursor-pointer border border-neutral-200 transition-transform duration-200 ease-in-out transform hover:scale-105 hover:border-2 hover:border-blue-400
+      max-[1360px]:w-56 max-[1200px]:w-40 max-[1200px]:p-2 max-[666px]:w-32
+    "
+    >
       <Image
         src={url}
         alt={`${name}${url}`}
         width="0"
         height="0"
-        className="w-full h-52 bg-black rounded-xl object-cover"
+        className="w-full h-52 bg-black rounded-xl object-cover 
+        max-[1200px]:h-32 max-[666px]:h-24"
       />
 
-      <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl font-bold text-sky-400">
+      <p
+        className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-xl font-bold text-sky-400
+        max-[1200px]:text-lg"
+      >
         {name}
       </p>
 
-      <p className="my-1 font-semibold text-zinc-500">
+      <p
+        className="my-1 font-semibold text-zinc-500
+        max-[1200px]:text-sm"
+      >
         {size} {unit}
       </p>
 
       <div className="flex text-center items-center justify-center">
-        <span className="text-sm text-gray-950 bg-slate-200 p-1 rounded-md font-medium">
+        <span
+          className="text-sm text-gray-950 bg-slate-200 p-1 rounded-md font-medium
+          max-[1200px]:text-xs max-[1200px]:hidden"
+        >
           {w} - {h}
         </span>
-        <span className="mx-1">
+        <span className="mx-1 max-[1200px]:hidden">
           <ArrowRight size={20} color="#000000" />
         </span>
-        <span className="text-sm text-gray-950 bg-indigo-200 p-1 rounded-md font-medium">
+        <span
+          className="text-sm text-gray-950 bg-indigo-200 p-1 rounded-md font-medium
+          max-[1200px]:text-xs"
+        >
           {wResize} - {hResize}
         </span>
-        {/* <div className="flex items-center justify-between text-sm bg-indigo-200 p-1 rounded-md">
-          <input
-            value={width}
-            className="w-[auto] text-gray-950 max-w-8 border-none focus:outline-none focus:ring-0 bg-transparent font-medium"
-          />
-          <span className="mx-1 text-gray-950">-</span>
-          <input
-            value={height}
-            className="w-[auto] text-gray-950 max-w-8 border-none focus:outline-none focus:ring-0 bg-transparent font-medium"
-          />
-        </div> */}
       </div>
 
       <div

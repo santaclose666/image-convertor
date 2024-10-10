@@ -5,6 +5,7 @@ import { Tab } from "@/models/Tabs.model";
 import PercentageResize from "./PercentageResize";
 import DimensionResize from "./DimensionResize";
 import Loading from "../Common/Loading";
+import { imgFormat } from "@/models/Image.model";
 
 interface ImageOptionProps {
   format: string;
@@ -15,13 +16,14 @@ interface ImageOptionProps {
   onSizeChange: (size: string, isWChange: boolean) => void;
 }
 
-const formatSupport: string[] = [
+const formatSupport: imgFormat[] = [
   "Original",
   "JPG",
   "PNG",
   "WEBP",
   "AVIF",
   "GIF",
+  "PDF",
 ];
 
 function ImageOption(props: ImageOptionProps) {
@@ -83,57 +85,61 @@ function ImageOption(props: ImageOptionProps) {
 
   return (
     <div
-      className={`h-full ml-8 transition-all duration-500 ${
-        display ? "w-1/4 opacity-100 flex-grow min-w-64" : "opacity-0 w-0"
-      }`}
+      className={`h-full transition-all duration-500 ${
+        display ? "w-1/4 opacity-100 min-w-64" : "opacity-0 w-0"
+      } max-[1200px]:w-[75%] max-[1200px]:h-1/4 max-[1200px]:min-w-[500px]`}
     >
       <div
-        className={`border-2 border-sky-300 break-words p-4 overflow-hidden bg-white rounded-3xl h-full max-h-full shadow-2xl flex flex-col transform transition-transform duration-500 ${
+        className={`border-2 border-sky-300 break-words p-4 gap-3 overflow-hidden bg-white rounded-3xl h-full max-h-full shadow-2xl flex flex-col transform transition-transform duration-500 ${
           display ? "translate-x-0" : "translate-x-full"
-        }`}
+        } max-[1200px]:flex-row`}
       >
-        <h2 className="text-sky-500 text-center font-medium text-2xl mb-3">
+        <h2 className="text-sky-500 text-center font-medium text-2xl mb-3 max-[1200px]:hidden">
           Resize Options
         </h2>
 
         <TabsOptions tabs={tabsData} />
 
-        <div className="flex flex-col mt-4">
-          <label className="text-sky-500 mb-2">Save Image As</label>
-          <select
-            value={format.toUpperCase()}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              const format = e.target.value;
-              onFormatChange(format.toLowerCase());
-            }}
-            className="text-lg border text-sky-500 border-gray-300 rounded-lg px-4 py-3 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 hover:border-blue-400 transition duration-200 ease-in-out"
-          >
-            {formatSupport.map((item) => {
-              return (
-                <option
-                  key={item}
-                  value={item}
-                  className="text-sky-500 bg-white hover:bg-sky-100 cursor-pointer text-lg"
-                >
-                  {item}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+        <div className="flex flex-1 flex-col gap-4">
+          <div className="flex flex-col">
+            <label className="text-sky-500">Save Image As</label>
+            <select
+              value={format.toUpperCase()}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                const format = e.target.value;
+                onFormatChange(format.toLowerCase());
+              }}
+              className="text-lg border text-sky-500 border-gray-300 rounded-lg p-3 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 hover:border-blue-400 transition duration-200 ease-in-out"
+            >
+              {formatSupport.map((item) => {
+                return (
+                  <option
+                    key={item}
+                    value={item}
+                    className="text-sky-500 bg-white hover:bg-sky-100 cursor-pointer text-lg"
+                  >
+                    {item}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
 
-        <button
-          disabled={isFetching}
-          onClick={handleSubmit}
-          className="flex items-center justify-center mt-auto bg-sky-400 text-white text-2xl font-semibold px-4 py-3 rounded-lg shadow hover:bg-sky-500 transition"
-        >
-          {isFetching ? "Processing Images" : "Resize Images"}{" "}
-          {isFetching ? (
-            <Loading className="ml-2" />
-          ) : (
-            <Scaling className="ml-2" />
-          )}
-        </button>
+          <button
+            disabled={isFetching}
+            onClick={handleSubmit}
+            className="flex items-center justify-center mt-auto bg-sky-400 text-white text-2xl font-semibold px-4 py-3 rounded-lg shadow hover:bg-sky-500 transition 
+            max-[1350px]:text-xl max-[1200px]:text-lg max-[1200px]:mt-0
+            "
+          >
+            {isFetching ? "Processing Images" : "Resize Images"}{" "}
+            {isFetching ? (
+              <Loading className="ml-2" />
+            ) : (
+              <Scaling className="ml-2" />
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

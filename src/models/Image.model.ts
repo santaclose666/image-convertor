@@ -1,3 +1,12 @@
+export type imgFormat =
+  | "Original"
+  | "JPG"
+  | "PNG"
+  | "WEBP"
+  | "AVIF"
+  | "GIF"
+  | "PDF";
+
 export interface ImagesUpload {
   url: string;
   name: string;

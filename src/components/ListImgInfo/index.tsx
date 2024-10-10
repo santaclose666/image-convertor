@@ -14,9 +14,12 @@ function ImageInfo(props: ImageInfoProps) {
 
   return (
     <div
-      className={`h-4/5 flex justify-center bg-white border-2 border-sky-300 rounded-3xl`}
+      className={`h-4/5 flex justify-center bg-white border-2 border-sky-300 rounded-3xl w-full`}
     >
-      <div className="flex items-center justify-center gap-5 flex-wrap p-5 overflow-hidden overflow-y-auto scrollbar-custom">
+      <div
+        className="flex items-center justify-center gap-5 flex-wrap p-5 overflow-hidden overflow-y-auto scrollbar-custom
+        max-[666px]:gap-2"
+      >
         {images.map((item: ImagesUpload, index: number) => (
           <ImageCard
             {...item}

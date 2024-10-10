@@ -30,13 +30,13 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
   };
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between w-full mb-4">
-        <div className="flex flex-col w-1/2 pr-2">
+    <div className="flex flex-col gap-1 w-full">
+      <div className="flex items-center justify-between w-full max-[1360px]:flex-col">
+        <div className="flex flex-col w-[46%] max-[1360px]:w-full">
           <label
-            className={`text-md mb-1 font-medium ${
+            className={`text-md font-medium ${
               isFocusWidth ? "text-sky-500" : "text-gray-300"
-            } `}
+            }`}
           >
             Width
           </label>
@@ -53,9 +53,9 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
           />
         </div>
 
-        <div className="flex flex-col w-1/2 pl-2">
+        <div className="flex flex-col w-[46%] max-[1360px]:w-full">
           <label
-            className={`text-md mb-1 font-medium ${
+            className={`text-md font-medium ${
               !isFocusWidth ? "text-sky-500" : "text-gray-300"
             } `}
           >

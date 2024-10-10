@@ -55,6 +55,8 @@ const Home = () => {
 
           return res;
         } catch (error) {
+          console.log(error);
+
           return null;
         }
       })
@@ -127,8 +129,12 @@ const Home = () => {
   };
 
   return (
-    <div className="px-24 py-12 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400">
-      <div className="w-3/4 h-full overflow-hidden">
+    <div
+      className="px-28 py-16 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400
+      gap-3 max-[1200px]:flex-col
+    "
+    >
+      <div className="w-3/4 h-full overflow-hidden max-[1200px]:w-[75%] max-[1200px]:min-w-[500px]">
         <UploadImg
           isReselect={images.length > 0}
           onSelectedChange={(e: ChangeEvent<HTMLInputElement>) => {
