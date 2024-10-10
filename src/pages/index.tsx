@@ -41,17 +41,26 @@ const Home = () => {
 
       img.onerror = () => {
         revokeUrl(img.src);
-        reject(new Error(`Error loading image: ${file.name}`));
+
+        reject("err");
       };
     });
   };
 
   const handleFileChange = async (files: File[]) => {
-    const images: ImagesUpload[] = await Promise.all(
-      files.map((file) => getImgInfo(file))
+    const images: (ImagesUpload | null)[] = await Promise.all(
+      files.map(async (file) => {
+        try {
+          const res = await getImgInfo(file);
+
+          return res;
+        } catch (error) {
+          return null;
+        }
+      })
     );
 
-    setImages(images);
+    setImages(images.filter((item) => item !== null));
   };
 
   const handleRemoveImg = (url: string) => {

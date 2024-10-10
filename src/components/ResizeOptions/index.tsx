@@ -15,7 +15,14 @@ interface ImageOptionProps {
   onSizeChange: (size: string, isWChange: boolean) => void;
 }
 
-const formatSupport: string[] = ["Original", "JPG", "PNG", "WEBP", "AVIF"];
+const formatSupport: string[] = [
+  "Original",
+  "JPG",
+  "PNG",
+  "WEBP",
+  "AVIF",
+  "GIF",
+];
 
 function ImageOption(props: ImageOptionProps) {
   const {
@@ -94,10 +101,11 @@ function ImageOption(props: ImageOptionProps) {
         <div className="flex flex-col mt-4">
           <label className="text-sky-500 mb-2">Save Image As</label>
           <select
-            value={format}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-              onFormatChange(e.target.value)
-            }
+            value={format.toUpperCase()}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              const format = e.target.value;
+              onFormatChange(format.toLowerCase());
+            }}
             className="text-lg border text-sky-500 border-gray-300 rounded-lg px-4 py-3 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 hover:border-blue-400 transition duration-200 ease-in-out"
           >
             {formatSupport.map((item) => {
