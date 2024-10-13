@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { sendMultiFormImg } from "@/api";
 import DropImgs from "@/components/DropImg";
 import ImageInfo from "@/components/ListImgInfo";
@@ -129,36 +130,52 @@ const Home = () => {
   };
 
   return (
-    <div
-      className="px-28 py-16 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400
+    <>
+      <Head>
+        <title>Image Uploader - Upload and Resize Images</title>
+        <meta
+          name="description"
+          content="Upload, resize, and convert your images easily with our web app."
+        />
+        <meta
+          name="keywords"
+          content="image upload, image resize, image conversion, image processing"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div
+        className="px-28 py-16 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400
       gap-3 max-[1200px]:flex-col
     "
-    >
-      <div className="w-3/4 h-full overflow-hidden max-[1200px]:w-[75%] max-[1200px]:min-w-[500px]">
-        <UploadImg
-          isReselect={images.length > 0}
-          onSelectedChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const files = e.target.files ? Array.from(e.target.files) : [];
-            handleFileChange(files);
-          }}
+      >
+        <div className="w-3/4 h-full overflow-hidden max-[1200px]:w-[75%] max-[1200px]:min-w-[500px]">
+          <UploadImg
+            isReselect={images.length > 0}
+            onSelectedChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const files = e.target.files ? Array.from(e.target.files) : [];
+              handleFileChange(files);
+            }}
+          />
+
+          {images.length > 0 ? (
+            <ImageInfo images={images} onRemoveImg={handleRemoveImg} />
+          ) : (
+            <DropImgs onDropImgs={handleFileChange} />
+          )}
+        </div>
+
+        <ImageOption
+          format={format}
+          display={images.length > 0}
+          onFormatChange={setFormat}
+          onSizeChange={handleResizeImg}
+          onSubmitImgs={handleSubmitImgs}
+          onRatioChange={handleRatioChange}
         />
-
-        {images.length > 0 ? (
-          <ImageInfo images={images} onRemoveImg={handleRemoveImg} />
-        ) : (
-          <DropImgs onDropImgs={handleFileChange} />
-        )}
       </div>
-
-      <ImageOption
-        format={format}
-        display={images.length > 0}
-        onFormatChange={setFormat}
-        onSizeChange={handleResizeImg}
-        onSubmitImgs={handleSubmitImgs}
-        onRatioChange={handleRatioChange}
-      />
-    </div>
+    </>
   );
 };
 
