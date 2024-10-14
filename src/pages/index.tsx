@@ -142,6 +142,10 @@ const Home = () => {
           content="image upload, image resize, image conversion, image processing"
         />
         <meta name="robots" content="index, follow" />
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-5966175110520007"
+        ></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
