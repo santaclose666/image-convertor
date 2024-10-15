@@ -102,8 +102,11 @@ function ImageOption(props: ImageOptionProps) {
 
         <div className="flex flex-1 flex-col gap-4">
           <div className="flex flex-col">
-            <label className="text-sky-500">Save Image As</label>
+            <label htmlFor={"img-select"} className="text-sky-500">
+              Save Image As
+            </label>
             <select
+              id="img-select"
               value={format.toUpperCase()}
               onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 const format = e.target.value;

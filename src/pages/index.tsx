@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { sendMultiFormImg } from "@/api";
+import { sendMultiFormImg, serverWakeup } from "@/api";
 import DropImgs from "@/components/DropImg";
 import ImageInfo from "@/components/ListImgInfo";
 import ImageOption from "@/components/ResizeOptions";
@@ -9,11 +9,15 @@ import { convertNumber } from "@/util/dataMsUnit";
 import { floorNumber } from "@/util/number";
 import { jsonConvert } from "@/util/string";
 import { createUrl, revokeUrl } from "@/util/url";
-import { ChangeEvent, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const Home = () => {
   const [format, setFormat] = useState<string>("Original");
   const [images, setImages] = useState<ImagesUpload[]>([]);
+
+  useLayoutEffect(() => {
+    serverWakeup();
+  }, []);
 
   const getImgInfo = async (file: File): Promise<ImagesUpload> => {
     return new Promise((resolve, reject) => {
@@ -48,8 +52,11 @@ const Home = () => {
     });
   };
 
-  const handleFileChange = async (files: File[]) => {
-    const images: (ImagesUpload | null)[] = await Promise.all(
+  const handleFileChange = async (
+    files: File[],
+    isAddMore: boolean = false
+  ) => {
+    const imagesRaw: (ImagesUpload | null)[] = await Promise.all(
       files.map(async (file) => {
         try {
           const res = await getImgInfo(file);
@@ -63,7 +70,13 @@ const Home = () => {
       })
     );
 
-    setImages(images.filter((item) => item !== null));
+    const imgFilter = imagesRaw.filter((item) => item !== null);
+
+    const newImgs: ImagesUpload[] = isAddMore
+      ? [...images, ...imgFilter]
+      : imgFilter;
+
+    setImages(newImgs);
   };
 
   const handleRemoveImg = (url: string) => {
@@ -142,29 +155,44 @@ const Home = () => {
           content="image upload, image resize, image conversion, image processing"
         />
         <meta name="robots" content="index, follow" />
+
+        <link rel="icon" href="/favicon.ico" />
+
+        <meta
+          property="og:title"
+          content="Image Uploader - Upload and Resize Images"
+        />
+        <meta
+          property="og:description"
+          content="Easily upload, resize, and convert your images with our web app."
+        />
+        <meta property="og:image" content="/favicon.ico" />
+        <meta property="og:url" content="https://photosresize.id.vn" />
+        <meta property="og:type" content="website" />
+
         <meta
           name="google-adsense-account"
           content="ca-pub-5966175110520007"
         ></meta>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div
-        className="px-28 py-16 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 via-sky-200 to-sky-400
-      gap-3 max-[1200px]:flex-col
+        className="px-28 py-16 overflow-hidden flex w-screen h-screen items-center justify-center bg-gradient-to-b from-blue-100 bg-indigo-300 via-sky-200
+         gap-3 max-[1200px]:flex-col
     "
       >
         <div className="w-3/4 h-full overflow-hidden max-[1200px]:w-[75%] max-[1200px]:min-w-[500px]">
           <UploadImg
             isReselect={images.length > 0}
-            onSelectedChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const files = e.target.files ? Array.from(e.target.files) : [];
-              handleFileChange(files);
-            }}
+            onSelectedChange={handleFileChange}
           />
 
           {images.length > 0 ? (
-            <ImageInfo images={images} onRemoveImg={handleRemoveImg} />
+            <ImageInfo
+              images={images}
+              onAddMoreImg={handleFileChange}
+              onRemoveImg={handleRemoveImg}
+            />
           ) : (
             <DropImgs onDropImgs={handleFileChange} />
           )}

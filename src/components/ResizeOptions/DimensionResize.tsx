@@ -5,8 +5,8 @@ interface DimensionResizeProps {
 }
 
 const DimensionResize = ({ onResize }: DimensionResizeProps) => {
-  const [width, setWidth] = useState("0");
-  const [height, setHeight] = useState("0");
+  const [width, setWidth] = useState("");
+  const [height, setHeight] = useState("");
   const [isFocusWidth, setIsFocusWidth] = useState<boolean>(true);
 
   const handleResize = (size: string, isWidth: boolean) => {
@@ -23,9 +23,9 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
     setIsFocusWidth(isWidthFocus);
 
     if (isWidthFocus) {
-      setHeight("0");
+      setHeight("");
     } else {
-      setWidth("0");
+      setWidth("");
     }
   };
 
@@ -34,6 +34,7 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
       <div className="flex items-center justify-between w-full max-[1360px]:flex-col">
         <div className="flex flex-col w-[46%] max-[1360px]:w-full">
           <label
+            htmlFor={"inputW"}
             className={`text-md font-medium ${
               isFocusWidth ? "text-sky-500" : "text-gray-300"
             }`}
@@ -41,7 +42,9 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
             Width
           </label>
           <input
+            id="inputW"
             type="number"
+            min={6}
             className={`${
               isFocusWidth ? "text-sky-500" : "text-gray-300"
             } border border-gray-400 rounded-md px-3 text-sm py-3 focus:outline-none focus:border-sky-400`}
@@ -55,6 +58,7 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
 
         <div className="flex flex-col w-[46%] max-[1360px]:w-full">
           <label
+            htmlFor={"inputH"}
             className={`text-md font-medium ${
               !isFocusWidth ? "text-sky-500" : "text-gray-300"
             } `}
@@ -62,7 +66,9 @@ const DimensionResize = ({ onResize }: DimensionResizeProps) => {
             Height
           </label>
           <input
+            id="inputH"
             type="number"
+            min={6}
             className={`${
               !isFocusWidth ? "text-sky-500" : "text-gray-300"
             } border border-gray-400 rounded-md px-3 text-sm py-3 focus:outline-none focus:border-sky-400`}

@@ -21,7 +21,7 @@ function ImageCard(props: ImageCardProps) {
         alt={`${name}${url}`}
         width="0"
         height="0"
-        className="w-full h-52 bg-black rounded-xl object-cover 
+        className="w-full h-60 border border-neutral-200 bg-black rounded-xl object-contain 
         max-[1200px]:h-32 max-[666px]:h-24"
       />
 
